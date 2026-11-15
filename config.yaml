@@ -1,0 +1,74 @@
+# Source documents for the RAG pipeline (read-only — never written to).
+# To add a file: add an entry under `documents`.
+# To add a tool: just use a new `tool` value (and optionally list it in `tools`).
+
+source_root: "../source-project"   # overridden by RAG_SOURCE_ROOT in .env
+
+tools:
+  - claude_code
+  - kiro
+
+doc_types:
+  - instructions
+  - skill
+  - summary
+
+# --- Stage 2: chunking (sizes in tokens) ---
+chunking:
+  chunk_size: 512       # SentenceSplitter only splits header-sections longer than this
+  chunk_overlap: 50
+
+# --- Stage 3: embedding (Cohere) ---
+embedding:
+  model_name: "embed-v4.0"         # multilingual; newest model the LlamaIndex integration accepts
+  dimension: 1536                  # embed-v4.0 default output size — must match the Pinecone index
+  document_input_type: "search_document"
+  query_input_type: "search_query"
+  embed_batch_size: 48             # Cohere API max is 96
+
+# --- Stages 4+5: Pinecone ---
+pinecone:
+  index_name: "rag-agentic-docs"
+  cloud: "aws"
+  region: "us-east-1"
+  metric: "cosine"
+  namespace: ""                    # "" = default namespace
+
+# --- LLM (Cohere Command) — routing, rephrasing, structured query building, extraction, answers ---
+llm:
+  model_name: "command-a-03-2025"        # newest Command model llama-index-llms-cohere 0.10.0 accepts
+  temperature: 0.1
+
+# --- Query workflow thresholds ---
+query:
+  min_query_chars: 3         # shorter -> rejected before touching Pinecone
+  top_k: 5                   # results per normal search
+  expanded_top_k: 10         # results for the "expand" retry strategy
+  min_results: 2             # need at least this many results with score >= min_score
+  min_score: 0.20            # calibrated 2026-11-15: off-topic max 0.17, relevant Hebrew questions 0.21-0.62
+  max_attempts: 3            # total searches, including the first
+  retry_strategies: [rephrase, expand]   # tried in this order
+
+# --- Network ---
+network:
+  use_system_cert_store: true   # verify TLS via the Windows cert store (needed behind NetFree HTTPS inspection)
+
+# --- Structured layer (stage C) ---
+structured:
+  store_path: "data/structured_store.json"   # relative to this config file
+  min_section_chars: 40      # header-only / tiny sections are not sent to extraction
+  default_limit: 20
+  max_limit: 50              # validate_structured_query rejects larger limits
+  max_build_attempts: 2      # build the structured query at most twice, then fall back to semantic
+  earliest_date: "2020-01-01"  # dates before this are rejected as implausible
+
+documents:
+  - path: "CLAUDE.md"
+    tool: claude_code
+    doc_type: instructions
+  - path: "FRONTEND_GATEWAY_CONNECTION_SUMMARY.md"
+    tool: claude_code
+    doc_type: summary
+  - path: ".kiro/skills/code-review.md"
+    tool: kiro
+    doc_type: skill
