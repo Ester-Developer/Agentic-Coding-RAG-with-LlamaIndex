@@ -1,4 +1,4 @@
-# RAG with LlamaIndex — Agentic Coding Knowledge Base
+# Agentic Coding RAG with LlamaIndex
 
 **A RAG system that turns the markdown files written by AI coding tools (Claude Code, Kiro) into one queryable knowledge layer.**
 
@@ -174,8 +174,8 @@ Full decision log (Hebrew): [docs/DESIGN_NOTES.md](docs/DESIGN_NOTES.md).
 ## Getting started
 
 ```bash
-git clone https://github.com/Ester-Developer/RAG-with-LlamaIndex.git
-cd RAG-with-LlamaIndex
+git clone https://github.com/Ester-Developer/Agentic-Coding-RAG-with-LlamaIndex.git
+cd Agentic-Coding-RAG-with-LlamaIndex
 python -m venv .venv
 .venv\Scripts\activate          # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
