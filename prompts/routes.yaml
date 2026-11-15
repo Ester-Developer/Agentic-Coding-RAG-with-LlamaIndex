@@ -1,0 +1,28 @@
+# Route descriptions the Router (LLMSingleSelector) chooses between.
+# Edit the wording/examples here to tune routing — no code change needed.
+# Order matters: index 0 = semantic, index 1 = structured.
+
+semantic:
+  description: >
+    Semantic search over the raw markdown text. Use for explanatory or "how/why/what is" questions
+    about one specific topic, where the answer is a few relevant paragraphs: how something works,
+    what a component does, how to run or configure something, troubleshooting.
+  examples:
+    - "איך עובד תהליך ההתחברות מה-Frontend ל-Gateway?"
+    - "מה התפקיד של צוות relay?"
+    - "How do I run a service locally with docker compose?"
+    - "למה מקבלים 401 אחרי לוגין?"
+
+structured:
+  description: >
+    Structured lookup over extracted items (decisions, rules, warnings, changes) with full coverage
+    and hard filters. Use when the question asks for a complete LIST of items of a kind ("all the
+    decisions", "every rule"), for what is CURRENT/latest/in effect now about a subject, for items in
+    a TIME range ("last week", "since October", "in 2026"), for what CHANGED from X to Y, or for
+    warnings/sensitive/do-not-touch items.
+  examples:
+    - "תן לי את כל ההחלטות הטכניות"
+    - "מה ההנחיה העדכנית לגבי קבצי proto?"
+    - "מה סומן כרגיש בשבוע האחרון?"
+    - "אילו שינויים נעשו ב-API של ההתחברות?"
+    - "List all the rules from Kiro skills"

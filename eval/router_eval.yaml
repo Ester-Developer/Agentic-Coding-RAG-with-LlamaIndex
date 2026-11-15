@@ -1,0 +1,27 @@
+# Router eval: Hebrew questions of different kinds, with the route we expect the selector to choose.
+# kind: list / recency / time / change / semantic
+questions:
+  - question: "תן לי את כל ההחלטות הטכניות שהתקבלו בפרויקט"
+    kind: list
+    expected: structured
+  - question: "מה כל הכללים בצ'קליסט של ה-code review?"
+    kind: list
+    expected: structured
+  - question: "מה ההנחיה העדכנית לגבי קבצי ה-proto המשותפים?"
+    kind: recency
+    expected: structured
+  - question: "מה סומן כרגיש או כ'לא לגעת' בשבוע האחרון?"
+    kind: time
+    expected: structured
+  - question: "אילו שינויים נעשו ב-API של ההתחברות מאז אוקטובר?"
+    kind: change
+    expected: structured
+  - question: "איך עובד תהליך ההתחברות מה-Frontend דרך ה-Gateway?"
+    kind: semantic
+    expected: semantic
+  - question: "מה התפקיד של צוות Chain במערכת?"
+    kind: semantic
+    expected: semantic
+  - question: "איך מריצים שירות מקומית עם docker compose?"
+    kind: semantic
+    expected: semantic
